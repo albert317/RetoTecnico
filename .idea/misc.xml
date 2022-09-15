@@ -7,6 +7,7 @@
         <entry key="app/src/main/res/layout/fragment_detail_movie.xml" value="0.1734375" />
         <entry key="app/src/main/res/layout/fragment_list_movies.xml" value="0.1734375" />
         <entry key="app/src/main/res/layout/fragment_login.xml" value="0.1734375" />
+        <entry key="app/src/main/res/layout/view_movie.xml" value="0.1" />
       </map>
     </option>
   </component>
