@@ -5,10 +5,31 @@
     android:id="@+id/app_navigation"
     app:startDestination="@id/loginFragment">
 
-
     <fragment
         android:id="@+id/loginFragment"
         android:name="com.example.retotecnico.LoginFragment"
         android:label="fragment_login"
-        tools:layout="@layout/fragment_login" />
+        tools:layout="@layout/fragment_login" >
+        <action
+            android:id="@+id/action_loginFragment_to_listMoviesFragment"
+            app:destination="@id/listMoviesFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/listMoviesFragment"
+        android:name="com.example.retotecnico.ListMoviesFragment"
+        android:label="fragment_list_movies"
+        tools:layout="@layout/fragment_list_movies" >
+        <action
+            android:id="@+id/action_listMoviesFragment_to_detailMovieFragment"
+            app:destination="@id/detailMovieFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/detailMovieFragment"
+        android:name="com.example.retotecnico.DetailMovieFragment"
+        android:label="fragment_detail_movie"
+        tools:layout="@layout/fragment_detail_movie" >
+        <argument
+            android:name="idMovie"
+            app:argType="integer" />
+    </fragment>
 </navigation>
