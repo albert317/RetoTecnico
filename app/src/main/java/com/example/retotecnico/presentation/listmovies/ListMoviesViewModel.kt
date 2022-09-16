@@ -1,55 +1,29 @@
 package com.example.retotecnico.presentation.listmovies
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
+import com.example.retotecnico.domain.model.Failure
 import com.example.retotecnico.domain.model.Movie
+import com.example.retotecnico.domain.model.ResultType
+import com.example.retotecnico.domain.usecase.listmovies.GetMoviesUseCase
 import kotlinx.coroutines.launch
 
-class ListMoviesViewModel : ViewModel() {
+class ListMoviesViewModel(
+    private val getMoviesUseCase: GetMoviesUseCase
+) : ViewModel() {
     private val _state = MutableLiveData(UiState())
     val state: LiveData<UiState> get() = _state
 
     fun refresh() {
+        _state.value = UiState(loading = true)
         viewModelScope.launch {
-            //_state.value = UiState(loading = true)
-            _state.value = UiState(
-                loading = false,
-                movies = listOf(
-                    Movie(
-                        true,
-                        "val backdrop_path: String?",
-                        listOf(1, 2, 3),
-                        1,
-                        "sd",
-                        "ds",
-                        "overview",
-                        2.0,
-                        "/v28T5F1IygM8vXWZIycfNEm3xcL.jpg",
-                        "release_date",
-                        "title",
-                        true,
-                        vote_average = 2.0,
-                        3
-                    ), Movie(
-                        true,
-                        "val backdrop_path: String?",
-                        listOf(1, 2, 3),
-                        1,
-                        "sd",
-                        "ds",
-                        "overview",
-                        2.0,
-                        "/v28T5F1IygM8vXWZIycfNEm3xcL.jpg",
-                        "release_date",
-                        "title",
-                        true,
-                        vote_average = 2.0,
-                        3
-                    )
-                )
-            )
+            when (val result = getMoviesUseCase.invoke()) {
+                is ResultType.Success -> {
+                    _state.value = UiState(loading = false, result.value)
+                }
+                is ResultType.Error -> {
+                    _state.value = UiState(loading = false)
+                }
+            }
         }
     }
 
@@ -60,6 +34,17 @@ class ListMoviesViewModel : ViewModel() {
     data class UiState(
         val loading: Boolean = false,
         val movies: List<Movie>? = null,
-        val navigateTo: Movie? = null
+        val navigateTo: Movie? = null,
+        val error: Failure? = null
     )
+}
+
+@Suppress("UNCHECKED_CAST")
+class ListMoviesViewModelFactory(
+    private val getMoviesUseCase: GetMoviesUseCase,
+) :
+    ViewModelProvider.Factory {
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
+        return ListMoviesViewModel(getMoviesUseCase) as T
+    }
 }
