@@ -9,11 +9,12 @@ import com.example.retotecnico.domain.model.Movie
 import com.example.retotecnico.domain.model.ResultType
 
 class MoviesRepository(application: Application) {
-    private val remoteDataSource = MovieRemoteDataSource(application.getString(R.string.api_key))
+    private val remoteDataSource =
+        MovieRemoteDataSource(application.getString(R.string.api_key))
 
-    suspend fun requestMovies(): ResultType<List<Movie>, Failure> {
+    suspend fun requestMovies(page:Int): ResultType<List<Movie>, Failure> {
         return try {
-            val de = remoteDataSource.findMovies()
+            val de = remoteDataSource.findMovies(page)
             ResultType.Success(de.results.toLocalModel())
         } catch (e: Exception) {
             ResultType.Error(Failure.ErrorMessage(e.message))

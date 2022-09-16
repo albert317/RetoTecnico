@@ -13,10 +13,10 @@ class ListMoviesViewModel(
     private val _state = MutableLiveData(UiState())
     val state: LiveData<UiState> get() = _state
 
-    fun refresh() {
+    fun refresh(page:Int=1) {
         _state.value = UiState(loading = true)
         viewModelScope.launch {
-            when (val result = getMoviesUseCase.invoke()) {
+            when (val result = getMoviesUseCase(page)) {
                 is ResultType.Success -> {
                     _state.value = UiState(loading = false, result.value)
                 }
